@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  l4d2_server:
+    container_name: l4d2_server
+    image: serhiiartiukh5465/l4d2_dedicated_server
+    volumes:
+      - l4d2_server_data:/home/steam_user/files_server
+    ports:
+      - 27015:27015
+      - 27015:27015/udp
+    tty: true
+
+volumes:
+  l4d2_server_data:
+    external: true
