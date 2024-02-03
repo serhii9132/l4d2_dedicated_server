@@ -1,6 +1,6 @@
-# docker_l4d2_dedicated_server
+# l4d2_dedicated_server
 
-Docker [image](https://hub.docker.com/r/serhiiartiukh5465/l4d2_dedicated_server) for Left 4 Dead 2 Dedicated Server.
+Docker image for Left 4 Dead 2 Dedicated Server [(DockerHub link)](https://hub.docker.com/r/serhiiartiukh5465/l4d2_dedicated_server).
 
 Base Docker image - [ubuntu:noble-20231221](https://hub.docker.com/layers/library/ubuntu/noble-20231221/images/sha256-145bacc9db29ff9c9c021284e5b7b22f1193fc38556c578250c926cf3c883a13?context=explore).
 
@@ -11,7 +11,7 @@ docker run --name l4d2_server -t -p 27015:27015 -p 27015:27015/udp -v l4d2_serve
 ```
 ### or Docker Compose
 ```
-docker compose up -d
+docker compose up -d -f l4d2_dedicated_server/docker-compose.yml
 ```
 ## 
 This commands will start the server with the specified parameters: 
