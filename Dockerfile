@@ -9,11 +9,10 @@ EXPOSE 27015/udp
 
 # Setting up the system and installing dependencies for steamcmd
 RUN dpkg --add-architecture i386 && apt-get update -y \
-    && apt install -y locales && locale-gen en_US.UTF-8 \
     && echo steam steam/question select "I AGREE" |  debconf-set-selections \
     && echo steam steam/license note '' | debconf-set-selections \ 
-    && apt install -y curl steamcmd gdb lib32gcc-s1 lib32stdc++6 libstdc++6:i386 lib32z1 \
-    && rm -rf /var/lib/apt/lists/* \
+    && apt install -y --no-install-recommends ca-certificates curl steamcmd gdb \
+    && rm -rf /var/lib/apt/lists/* && apt-get clean \
     && ln -s /usr/games/steamcmd /usr/bin/steamcmd \
     # Creating a user for running the server
     && useradd --shell /bin/bash --create-home --uid ${USER_ID} --user-group ${USER_NAME} \
