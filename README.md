@@ -5,17 +5,25 @@ Docker image for Left 4 Dead 2 Dedicated Server [(DockerHub link)](https://hub.d
 Base Docker image - [ubuntu:noble-20231221](https://hub.docker.com/layers/library/ubuntu/noble-20231221/images/sha256-145bacc9db29ff9c9c021284e5b7b22f1193fc38556c578250c926cf3c883a13?context=explore).
 
 #  How to start
-### Default launch options
+#### Pull from DockerHub:
 ```
-docker run --name l4d2_server -t -p 27015:27015 -p 27015:27015/udp -v l4d2_server_data:/home/steam_user/files_server/ serhiiartiukh5465/l4d2_server
+docker pull serhiiartiukh5465/l4d2_dedicated_server
+
+docker run --name l4d2_server -t -p 27015:27015 -p 27015:27015/udp -v l4d2_server_data:/home/steam_user/files_server/ serhiiartiukh5465/l4d2_dedicated_server
 ```
-### or Docker Compose
+#### or build the image locally:
 ```
-docker compose up -d -f l4d2_dedicated_server/docker-compose.yml
+docker volume create l4d2_server_data
+
+docker build -t serhiiartiukh5465/l4d2_dedicated_server .
+
+docker compose up
 ```
-## 
-This commands will start the server with the specified parameters: 
-**./srcds_run -game left4dead2 -port 27015 -norestart -console -maxplayers 8 +map c1m1_hotel +sv_lan 0**. The server port is constant.
+
+The default server launch parameters.: 
+-console -maxplayers 8 +map c1m1_hotel +sv_lan 0. 
+
+The server port 27015 is constant.
 
 ### Example additional arguments
 ```
