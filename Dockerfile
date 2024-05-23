@@ -8,7 +8,6 @@ ARG PORT_SERVER
 ENV PATH_SERVER ${PATH_SERVER}
 
 EXPOSE ${PORT_SERVER}/tcp
-EXPOSE ${PORT_SERVER}/udp
 
 # Setting up the system and installing dependencies for steamcmd
 RUN dpkg --add-architecture i386 && apt-get update -y \
