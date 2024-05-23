@@ -1,3 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: l4d2-server-deployment-configmap
+  namespace: l4d2-server-namespace
+  labels:
+    app: l4d2-server
+data:
+  USER_ID: "47120"
+  # PATH_SERVER: "/home/steam_user/files_server"
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -6,6 +18,7 @@ metadata:
   labels:
     app: l4d2-server
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: l4d2-server
@@ -14,21 +27,57 @@ spec:
       labels:
         app: l4d2-server
     spec:
+      initContainers:
+        - name: fix-ownership-vol
+          image: busybox:latest
+          env:
+            - name: ownership_id
+              valueFrom:
+                configMapKeyRef:
+                  name: l4d2-server-deployment-configmap
+                  key: USER_ID
+            # - name: path_files_server
+            #   valueFrom:
+            #     configMapKeyRef:
+            #       name: l4d2-server-deployment-configmap
+            #       key: PATH_SERVER
+          command: ["sh", "-c", 
+                    "chown -R $(ownership_id):$(ownership_id) /home/steam_user/files_server;
+                    chmod 750 /home/steam_user/files_server"]
+          volumeMounts:
+            - name: l4d2-server-data
+              mountPath: /home/steam_user/files_server
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+          - 8.8.8.8
+      volumes:
+      - name: l4d2-server-data
+        emptyDir: {}
       containers:
-      - name: l4d2_server
-        image: serhiiartiukh5465/l4d2_dedicated_server
+      - name: l4d2-server
+        image: 192.168.56.12:43210/l4d2_dedicated_server
+        # image: serhiiartiukh5465/l4d2_dedicated_server
         ports:
-        - containerPort: 27015
-
+          - containerPort: 27015
+        volumeMounts:
+          - mountPath: /home/steam_user/files_server
+            name: l4d2-server-data
+        
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: l4d2-server-deployment
+  name: l4d2-server-service
+  namespace: l4d2-server-namespace
+  labels:
+    app: l4d2-server
 spec:
   type: NodePort
   selector:
     app: l4d2-server
   ports:
-  - port: 27015
-    NodePort: 27015
+  - name: server
+    protocol: TCP
+    port: 27015
+    nodePort: 32451
