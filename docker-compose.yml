@@ -1,13 +1,20 @@
-version: '3.8'
 services:
   l4d2_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+      - USER_NAME=$USER_NAME
+      - USER_ID=$USER_ID
+      - PORT_SERVER=$PORT_SERVER
+      - PATH_SERVER=$PATH_SERVER
+    image: l4d2_dedicated_server
     container_name: l4d2_server
-    image: serhiiartiukh5465/l4d2_dedicated_server
-    volumes:
-      - l4d2_server_data:/home/steam_user/files_server
     ports:
-      - 27015:27015
-      - 27015:27015/udp
+      - $PORT_SERVER:$PORT_SERVER
+      - $PORT_SERVER:$PORT_SERVER/udp
+    volumes:
+      - l4d2_server_data:${PATH_SERVER}
     tty: true
 
 volumes:
