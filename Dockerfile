@@ -1,11 +1,14 @@
-FROM ubuntu:noble-20231221
+FROM ubuntu:24.04
 
-ARG USER_NAME=steam_user
-ARG USER_ID=47120
-ENV PATH_SERVER=/home/${USER_NAME}/files_server
+ARG USER_NAME
+ARG USER_ID
+ARG PATH_SERVER
+ARG PORT_SERVER
 
-EXPOSE 27015/tcp
-EXPOSE 27015/udp
+ENV PATH_SERVER ${PATH_SERVER}
+
+EXPOSE ${PORT_SERVER}/tcp
+EXPOSE ${PORT_SERVER}/udp
 
 # Setting up the system and installing dependencies for steamcmd
 RUN dpkg --add-architecture i386 && apt-get update -y \
