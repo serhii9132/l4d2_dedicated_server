@@ -16,6 +16,14 @@ services:
     volumes:
       - l4d2_server_data:${PATH_SERVER}
     tty: true
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: '1G'
+        reservations:
+          cpus: '0.4'
+          memory: '256M'
 
 volumes:
   l4d2_server_data:
