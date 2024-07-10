@@ -36,47 +36,5 @@ docker run --name l4d2_server -t -p 27015:27015 -v l4d2_server_data:/home/steam_
 ### Volume
 All server files will be located in the volume **l4d2_server_data**. Approximate size of the data when unpacked is 9 GB.
 
-## **Deploying on K8S cluster**
-
-Deployment:
-
-```
-namespace: l4d2-server-namespace
-labels:
-    app: l4d2-server
-replicas: 1
-DNS nameservers: 8.8.8.8
-```
-
-Service:
-
-```
-protocol: TCP
-port: 27015
-nodePort: 32451
-```
-
-PV:
-
-```
-capacity: 
-    storage: 15Gi
-accessModes:
-    - ReadWriteOnce
-persistentVolumeReclaimPolicy: Retain
-hostPath:
-    path: "/media/k8s_pv/l4d2"
-```
-
-PVC:
-
-```
-resources:
-    requests:
-        storage: 15Gi
-accessModes:
-    - ReadWriteOnce
-```
-
 # License
 MIT
