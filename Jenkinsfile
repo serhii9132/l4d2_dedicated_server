@@ -28,10 +28,9 @@ pipeline{
         stage('Build image'){
             steps{
                 script{
-                    sh returnStatus: true, 
-                    script: "docker build . -t ${env.DOCKER_TAG_IMAGE} --build-arg PORT_SERVER=${env.PORT_SERVER} \
-                                    --build-arg PATH_SERVER=${env.PATH_SERVER}  --build-arg USER_NAME=${env.USER_NAME} \
-                                    --build-arg USER_ID=${env.USER_ID}"
+                    sh "docker build . -t ${env.DOCKER_TAG_IMAGE} --build-arg PORT_SERVER=${env.PORT_SERVER} \
+                        --build-arg PATH_SERVER=${env.PATH_SERVER}  --build-arg USER_NAME=${env.USER_NAME} \
+                        --build-arg USER_ID=${env.USER_ID}"
                     
                 }
             }
@@ -40,12 +39,23 @@ pipeline{
         stage('Push to DockerHub'){
             steps{
                 script{
-                    withDockerRegistry(credentialsId: 'dockerhub-token') {
-                        sh returnStatus: true,
-                        script: "docker push ${env.DOCKER_TAG_IMAGE}"
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-token', passwordVariable: 'pass', usernameVariable: 'username')]) {
+                        sh('echo ${pass} | docker login -u $username --password-stdin')
+                        sh "docker push ${env.DOCKER_TAG_IMAGE}"
                     }
                 }
             }
+            post {
+                always {
+                    sh "docker logout"
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            sh "docker image rm ${env.DOCKER_TAG_IMAGE} && docker buildx prune -f"
         }
     }
 }
