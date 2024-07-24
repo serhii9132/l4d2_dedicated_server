@@ -38,15 +38,18 @@ metadata:
   labels:
     app: l4d2-server
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: l4d2-server
   ports:
-    - name: server
+    - name: server-port-tcp
       protocol: TCP
       port: 27015
       targetPort: 27015
-      nodePort: 27015
+    - name: server-port-udp
+      protocol: UDP
+      port: 27015
+      targetPort: 27015
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -98,6 +101,9 @@ spec:
         image: serhiiartiukh5465/l4d2_dedicated_server
         ports:
           - containerPort: 27015
+            protocol: UDP
+          - containerPort: 27015
+            protocol: TCP
         resources:
           limits:
             memory: 1Gi
