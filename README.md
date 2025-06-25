@@ -2,7 +2,7 @@
 
 Docker image for Left 4 Dead 2 Dedicated Server [(DockerHub link)](https://hub.docker.com/r/serhiiartiukh5465/l4d2_dedicated_server).
 
-Base Docker image - [ubuntu:24.04](https://hub.docker.com/layers/library/ubuntu/24.04/images/sha256-31e02f893eaf7729befc0e21920e63b968bffe76760943a6f56fa1c7f3abb055?context=explore).
+Base Docker image - [ubuntu:25.04](https://hub.docker.com/layers/library/ubuntu/25.04/images/sha256-3f0fd8560d144762a3b5a670e70bde00714347386eb7213eb651edc41aa6f241).
 
 #  How to start
 ## **Deploying on Docker**
